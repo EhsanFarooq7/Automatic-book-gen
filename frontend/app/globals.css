@@ -1,0 +1,701 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Geist:wght@300;400;500&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Geist", "Helvetica Neue", sans-serif;
+
+  --bg: #0e0d0c;
+  --bg-2: #161513;
+  --bg-3: #1e1c1a;
+  --bg-4: #252320;
+
+  --border: rgba(255, 255, 255, 0.07);
+  --border-md: rgba(255, 255, 255, 0.12);
+  --border-hi: rgba(255, 255, 255, 0.22);
+
+  --ink: #f0ece6;
+  --ink-2: #a09890;
+  --ink-3: #605850;
+
+  --amber: #d4a843;
+  --amber-dim: #8a6a20;
+  --amber-glow: rgba(212, 168, 67, 0.12);
+
+  --green: #4a9e6b;
+  --green-bg: rgba(74, 158, 107, 0.1);
+  --green-border: rgba(74, 158, 107, 0.25);
+
+  --red: #c05050;
+  --red-bg: rgba(192, 80, 80, 0.1);
+  --red-border: rgba(192, 80, 80, 0.25);
+
+  --blue: #5080c0;
+  --blue-bg: rgba(80, 128, 192, 0.1);
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+}
+
+html,
+body {
+  min-height: 100%;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout shell ── */
+.ab-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.25rem 5rem;
+  position: relative;
+}
+
+/* Subtle noise texture overlay */
+.ab-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+.ab-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+}
+
+/* ── Header ── */
+.ab-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 2.5rem;
+}
+
+.ab-logo {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ab-header-text h1 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.ab-header-text p {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── Card ── */
+.ab-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+}
+
+.ab-card-body {
+  padding: 2rem;
+}
+
+@media (max-width: 500px) {
+  .ab-card-body {
+    padding: 1.25rem;
+  }
+}
+
+/* ── Steps bar ── */
+.ab-steps {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.ab-step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  position: relative;
+}
+
+.ab-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--border);
+}
+
+.ab-step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--border-md);
+  color: var(--ink-3);
+  transition: all 0.2s;
+}
+
+.ab-step--active .ab-step-num {
+  background: var(--amber);
+  color: var(--bg);
+  border-color: var(--amber);
+}
+
+.ab-step--done .ab-step-num {
+  background: var(--green-bg);
+  color: var(--green);
+  border-color: var(--green-border);
+}
+
+.ab-step-label {
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+}
+
+.ab-step--active .ab-step-label {
+  color: var(--ink);
+}
+
+.ab-step--done .ab-step-label {
+  color: var(--green);
+}
+
+@media (max-width: 420px) {
+  .ab-step-label {
+    display: none;
+  }
+
+  .ab-step {
+    justify-content: center;
+  }
+}
+
+/* ── Step content ── */
+.ab-step-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.ab-step-desc {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Error ── */
+.ab-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  background: var(--red-bg);
+  border: 1px solid var(--red-border);
+  border-radius: var(--r-md);
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--red);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.ab-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Form ── */
+.ab-field {
+  margin-bottom: 1.1rem;
+}
+
+.ab-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.ab-label span {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--ink-3);
+  opacity: 0.6;
+}
+
+.ab-input,
+.ab-textarea {
+  width: 100%;
+  background: var(--bg-3);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-md);
+  padding: 10px 13px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  line-height: 1.5;
+}
+
+.ab-input::placeholder,
+.ab-textarea::placeholder {
+  color: var(--ink-3);
+}
+
+.ab-input:focus,
+.ab-textarea:focus {
+  border-color: var(--amber-dim);
+  box-shadow: 0 0 0 3px var(--amber-glow);
+}
+
+.ab-textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+/* ── Buttons ── */
+.ab-btn-row {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.ab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.ab-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.ab-btn--ghost {
+  background: transparent;
+  border-color: var(--border-md);
+  color: var(--ink-2);
+}
+
+.ab-btn--ghost:hover:not(:disabled) {
+  border-color: var(--border-hi);
+  color: var(--ink);
+}
+
+.ab-btn--primary {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+.ab-btn--primary:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.ab-btn--success {
+  background: var(--green-bg);
+  border-color: var(--green-border);
+  color: var(--green);
+}
+
+.ab-btn--success:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.ab-btn--danger {
+  background: var(--red-bg);
+  border-color: var(--red-border);
+  color: var(--red);
+}
+
+/* ── Outline box ── */
+.ab-outline-box {
+  background: var(--bg-3);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-md);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-height: 240px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-md) transparent;
+}
+
+.ab-outline-item {
+  display: flex;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+
+.ab-outline-item:last-child {
+  border-bottom: none;
+}
+
+.ab-outline-num {
+  font-size: 11px;
+  color: var(--ink-3);
+  min-width: 20px;
+  padding-top: 2px;
+}
+
+.ab-outline-text {
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* ── Stat tiles ── */
+.ab-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.ab-stat {
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 14px 12px;
+  text-align: center;
+}
+
+.ab-stat-val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.ab-stat-lbl {
+  font-size: 10px;
+  color: var(--ink-3);
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Review form ── */
+.ab-review-section {
+  background: var(--bg-3);
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-md);
+  padding: 1rem 1.1rem;
+  margin-top: 1rem;
+}
+
+.ab-review-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.ab-review-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* ── Progress ── */
+.ab-progress-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.ab-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ab-progress-track {
+  height: 2px;
+  background: var(--bg-4);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.ab-progress-fill {
+  height: 100%;
+  background: var(--amber);
+  border-radius: 1px;
+  transition: width 0.5s ease;
+}
+
+/* ── Chapter list ── */
+.ab-chapter-list {
+  margin-bottom: 1.5rem;
+}
+
+.ab-chapter-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+
+.ab-chapter-row:last-child {
+  border-bottom: none;
+}
+
+.ab-ch-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+}
+
+.ab-ch-dot--done {
+  background: var(--green-bg);
+  color: var(--green);
+  border: 1px solid var(--green-border);
+}
+
+.ab-ch-dot--active {
+  background: var(--amber-glow);
+  color: var(--amber);
+  border: 1px solid var(--amber-dim);
+}
+
+.ab-ch-dot--pending {
+  background: var(--bg-4);
+  border: 1px solid var(--border);
+}
+
+.ab-ch-name {
+  flex: 1;
+  color: var(--ink);
+}
+
+.ab-ch-action {
+  flex-shrink: 0;
+}
+
+.ab-ch-words {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+
+/* ── Chapter generate button ── */
+.ab-ch-btn {
+  padding: 5px 11px;
+  font-size: 11px;
+  font-family: var(--font-body);
+  border: 1px solid var(--amber-dim);
+  border-radius: var(--r-sm);
+  background: var(--amber-glow);
+  color: var(--amber);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ab-ch-btn:hover {
+  background: var(--amber);
+  color: var(--bg);
+}
+
+.ab-ch-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Final / download ── */
+.ab-toc {
+  border: 1px solid var(--border-md);
+  border-radius: var(--r-md);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ab-toc-heading {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+}
+
+.ab-toc-row {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.ab-toc-row:last-child {
+  border-bottom: none;
+}
+
+.ab-toc-n {
+  color: var(--ink-3);
+  min-width: 22px;
+  font-size: 11px;
+  padding-top: 1px;
+}
+
+.ab-dl-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  background: var(--amber);
+  border: none;
+  border-radius: var(--r-md);
+  color: var(--bg);
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.ab-dl-btn:hover {
+  opacity: 0.85;
+}
+
+.ab-dl-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Spinner ── */
+@keyframes ab-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ab-spinner {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: var(--bg);
+  border-radius: 50%;
+  animation: ab-spin 0.65s linear infinite;
+}
+
+.ab-spinner--light {
+  border-color: rgba(255, 255, 255, 0.15);
+  border-top-color: var(--amber);
+}
+
+/* ── Divider ── */
+.ab-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1.25rem 0;
+}
+
+/* ── Info box ── */
+.ab-info {
+  display: flex;
+  gap: 9px;
+  background: var(--blue-bg);
+  border: 1px solid rgba(80, 128, 192, 0.25);
+  border-radius: var(--r-md);
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--blue);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+/* ── Success box ── */
+.ab-success {
+  display: flex;
+  gap: 9px;
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: var(--r-md);
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--green);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
